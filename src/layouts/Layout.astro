@@ -1,0 +1,245 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import LanguageDetection from '../components/LanguageDetection.astro';
+import { home, workUrl, copy, edition, type Locale } from '../data/portfolio';
+interface Props {
+  lang: Locale;
+  title?: string;
+  description?: string;
+  slug?: string;
+}
+const {
+  lang,
+  title = 'Carlos Martínez — Full-Stack Developer',
+  description = edition[lang].heroSub,
+  slug,
+} = Astro.props;
+const t = copy[lang],
+  e = edition[lang];
+const enUrl = slug ? workUrl('en', slug) : '/',
+  esUrl = slug ? workUrl('es', slug) : '/es/';
+const ids = ['work', 'experience', 'about', 'contact'];
+const site = Astro.site;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {lang === 'en' && !slug && <LanguageDetection />}
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f2f3f5" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_MX'} />
+    <meta
+      property="og:image"
+      content={
+        site ? new URL('/social-card.png', site).href : '/social-card.png'
+      }
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    {site && (
+      <>
+        <link rel="canonical" href={new URL(Astro.url.pathname, site)} />
+        <meta
+          property="og:url"
+          content={new URL(Astro.url.pathname, site).href}
+        />
+        <link rel="alternate" hreflang="en" href={new URL(enUrl, site).href} />
+        <link rel="alternate" hreflang="es" href={new URL(esUrl, site).href} />
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={new URL(enUrl, site).href}
+        />
+      </>
+    )}
+    <script is:inline>
+      (() => {
+        let preference;
+        try {
+          preference = localStorage.getItem('portfolio-theme');
+        } catch {}
+        const theme =
+          preference === 'light' || preference === 'dark'
+            ? preference
+            : matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', theme === 'dark' ? '#111318' : '#f2f3f5');
+        document.documentElement.classList.add('js');
+      })();
+    </script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">
+      {t.skip}
+    </a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href={home(lang)}
+          aria-label={
+            lang === 'en'
+              ? `cm — Carlos Martínez — Home. ${e.identity}`
+              : `cm — Carlos Martínez — Inicio. ${e.identity}`
+          }
+        >
+          <span class="brand-symbol">
+            c<span>m</span>
+            <i></i>
+          </span>
+          <span class="brand-description">{e.identity}</span>
+        </a>
+        <nav
+          id="navigation"
+          aria-label={
+            lang === 'en' ? 'Main navigation' : 'Navegación principal'
+          }
+        >
+          {t.nav.map((name, i) => (
+            <a href={`${home(lang)}#${ids[i]}`}>
+              <span class="nav-num">0{i + 1}</span>
+              {name}
+            </a>
+          ))}
+        </nav>
+        <div class="header-actions">
+          <div
+            class="language-switch"
+            aria-label={lang === 'en' ? 'Language' : 'Idioma'}
+          >
+            <a
+              href={enUrl}
+              lang="en"
+              aria-current={lang === 'en' ? 'page' : undefined}
+            >
+              EN
+            </a>
+            <span>/</span>
+            <a
+              href={esUrl}
+              lang="es"
+              aria-current={lang === 'es' ? 'page' : undefined}
+            >
+              ES
+            </a>
+          </div>
+          <button
+            class="theme-toggle"
+            type="button"
+            aria-label={e.dark}
+            data-light-label={e.light}
+            data-dark-label={e.dark}
+          >
+            <svg
+              class="sun-icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+            </svg>
+            <svg
+              class="moon-icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14.5A9 9 0 0 1 9.5 4 9 9 0 1 0 20 14.5Z" />
+            </svg>
+          </button>
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-controls="navigation"
+            aria-expanded="false"
+            aria-label={t.menu}
+          >
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer container">
+      <a
+        class="brand-symbol"
+        href={home(lang)}
+        aria-label="cm — Carlos Martínez"
+      >
+        c<span>m</span>
+        <i></i>
+      </a>
+      <p>
+        © {new Date().getFullYear()} Carlos Martínez <span>{t.footer}</span>
+      </p>
+      <a href="#top" class="back-top">
+        {t.top}
+        <Icon name="diagonal" />
+      </a>
+    </footer>
+    <script>
+      import { initTheme } from '../scripts/theme';
+      import { initMotion } from '../scripts/motion';
+      import { initLanguageChoice } from '../scripts/language';
+      initLanguageChoice();
+      initTheme();
+      initMotion();
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.querySelector<HTMLElement>('#navigation');
+      const close = () => {
+        toggle?.setAttribute('aria-expanded', 'false');
+        nav?.classList.remove('is-open');
+      };
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        nav?.classList.toggle('is-open', open);
+      });
+      nav
+        ?.querySelectorAll('a')
+        .forEach((a) => a.addEventListener('click', close));
+      document.addEventListener('keydown', (e) => {
+        if (
+          e.key === 'Escape' &&
+          toggle?.getAttribute('aria-expanded') === 'true'
+        ) {
+          close();
+          toggle.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (
+          e.target instanceof Node &&
+          !nav?.contains(e.target) &&
+          !toggle?.contains(e.target)
+        )
+          close();
+      });
+    </script>
+  </body>
+</html>

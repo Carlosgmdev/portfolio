@@ -1,0 +1,48 @@
+---
+import Icon from './Icon.astro';
+import { copy, edition, profile, type Locale } from '../data/portfolio';
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const t = copy[lang],
+  e = edition[lang];
+---
+
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="contact-top">
+      <span class="eyebrow">05 / {t.contactEyebrow}</span>
+      <span class="contact-star" aria-hidden="true">
+        ✳
+      </span>
+    </div>
+    <div class="contact-title">
+      <h2 data-reveal-lines>{e.contactTitle}</h2>
+      <a
+        class="contact-arrow magnetic"
+        href={`mailto:${profile.email}`}
+        aria-label={t.contact}
+      >
+        <Icon name="diagonal" />
+      </a>
+    </div>
+    <div class="contact-bottom">
+      <p>{t.contactDescription}</p>
+      <div>
+        <a href={`mailto:${profile.email}`}>
+          {profile.email}
+          <Icon name="diagonal" />
+        </a>
+        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+          LinkedIn
+          <Icon name="diagonal" />
+        </a>
+        <a href={`/cv/carlos-martinez-${lang}.pdf`} download>
+          {t.resume}
+          <Icon name="download" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+interface Props {
+  name?: 'arrow' | 'diagonal' | 'download' | 'code' | 'mail' | 'plus';
+  class?: string;
+}
+const { name = 'arrow', class: className } = Astro.props;
+const paths = {
+  arrow: 'M4 12h16m-6-6 6 6-6 6',
+  diagonal: 'M6 18 18 6M6 6h12v12',
+  download: 'M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4',
+  code: 'm8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18',
+  mail: 'M3 5h18v14H3zM3 6l9 7 9-7',
+  plus: 'M12 5v14M5 12h14',
+};
+---
+
+<svg
+  class={className}
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={paths[name]} />
+</svg>

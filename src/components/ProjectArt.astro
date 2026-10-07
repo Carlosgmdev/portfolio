@@ -1,0 +1,139 @@
+---
+import { edition, type Locale } from '../data/portfolio';
+interface Props {
+  slug: string;
+  lang: Locale;
+}
+const { slug, lang } = Astro.props;
+---
+
+<div class:list={['project-art', `art-${slug}`]} aria-hidden="true">
+  <div class="art-grid"></div>
+  {slug === 'zenit' && (
+    <>
+      <svg class="logistics-art" viewBox="0 0 800 550" fill="none">
+        <path
+          class="draw-path"
+          d="M110 345 310 225 535 345 710 240M110 345v-125L310 100l225 120v125M310 100v125m225-5 175-100v120M310 225v175l225 110V345M310 400l-200 115V345"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          class="draw-path art-blue-line"
+          d="m110 345 200-120 225 120 175-105"
+          stroke-width="3"
+        />
+        <g class="art-cubes">
+          <path
+            d="m263 197 47-27 47 27v55l-47 27-47-27Z"
+            fill="var(--art-cube)"
+            stroke="currentColor"
+          />
+          <path d="m263 197 47 27 47-27m-47 27v55" stroke="currentColor" />
+          <path
+            d="m496 323 39-22 39 22v45l-39 23-39-23Z"
+            fill="var(--art-cube)"
+            stroke="currentColor"
+          />
+          <path d="m496 323 39 22 39-22m-39 22v46" stroke="currentColor" />
+        </g>
+        <circle
+          class="art-traveler"
+          cx="110"
+          cy="345"
+          r="7"
+          fill="var(--blue)"
+        />
+        <circle cx="710" cy="240" r="5" fill="var(--blue)" />
+      </svg>
+      <span class="art-word">
+        ZÉNIT<span>®</span>
+      </span>
+      <span class="art-corner">
+        01 / {lang === 'en' ? 'CONNECTED OPERATIONS' : 'OPERACIONES CONECTADAS'}
+      </span>
+    </>
+  )}
+  {slug === 'driveka' && (
+    <>
+      <svg class="commerce-art" viewBox="0 0 800 550" fill="none">
+        <g class="commerce-tracks" stroke="currentColor">
+          <path
+            class="draw-path"
+            d="M-50 390C170 390 170 100 400 100s230 290 450 290"
+          />
+          <path
+            class="draw-path"
+            d="M-50 430C170 430 170 140 400 140s230 290 450 290"
+          />
+          <path
+            class="draw-path"
+            d="M-50 470C170 470 170 180 400 180s230 290 450 290"
+          />
+          <path
+            class="draw-path"
+            d="M-50 510C170 510 170 220 400 220s230 290 450 290"
+          />
+        </g>
+        <path
+          class="draw-path art-blue-line"
+          d="M-50 450C170 450 170 160 400 160s230 290 450 290"
+          stroke-width="2"
+        />
+      </svg>
+      <span class="art-word driveka-word">
+        driveka<span>↗</span>
+      </span>
+      <div class="commerce-chip">
+        <span></span>
+        {lang === 'en'
+          ? 'DISCOVER. CONNECT. MANAGE.'
+          : 'BUSCAR. CONECTAR. GESTIONAR.'}
+      </div>
+      <span class="art-corner">
+        02 / {lang === 'en' ? 'COMMERCE IN MOTION' : 'COMERCIO EN MOVIMIENTO'}
+      </span>
+    </>
+  )}
+  {slug === 'visitapp' && (
+    <>
+      <svg class="people-art" viewBox="0 0 800 550" fill="none">
+        <circle
+          class="draw-path"
+          cx="400"
+          cy="275"
+          r="185"
+          stroke="currentColor"
+        />
+        <circle
+          class="draw-path"
+          cx="400"
+          cy="275"
+          r="135"
+          stroke="currentColor"
+          stroke-dasharray="5 8"
+        />
+        <path
+          class="draw-path"
+          d="M400 40v470M170 275h460"
+          stroke="currentColor"
+        />
+        <circle cx="585" cy="275" r="7" fill="var(--blue)" />
+        <circle cx="400" cy="90" r="5" fill="var(--blue)" />
+      </svg>
+      <div class="visit-modules">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <span class="art-corner">
+        03 /{' '}
+        {lang === 'en'
+          ? 'PEOPLE. PLACES. POSSIBILITIES.'
+          : 'PERSONAS. ESPACIOS. POSIBILIDADES.'}
+      </span>
+    </>
+  )}
+  <span class="art-caption">{edition[lang].concept}</span>
+</div>

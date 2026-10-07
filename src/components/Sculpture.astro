@@ -1,0 +1,115 @@
+---
+import { edition, type Locale } from '../data/portfolio';
+interface Props {
+  id: string;
+  lang: Locale;
+  class?: string;
+}
+const { id, lang, class: className } = Astro.props;
+const labels = edition[lang].layers.map((layer) => layer.title.toUpperCase());
+---
+
+<div
+  class:list={['sculpture', className]}
+  data-sculpture={id}
+  data-layer-labels={JSON.stringify(labels)}
+  aria-hidden="true"
+>
+  <div class="sculpture-glow"></div>
+  <svg class="sculpture-fallback" viewBox="0 0 600 600" fill="none">
+    <defs>
+      <linearGradient
+        id={`${id}-edge`}
+        x1="140"
+        y1="270"
+        x2="460"
+        y2="350"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#7f8b9e" />
+        <stop offset=".48" stop-color="#f2f5fb" />
+        <stop offset=".52" stop-color="#c0c9d8" />
+        <stop offset="1" stop-color="#738098" />
+      </linearGradient>
+      <linearGradient
+        id={`${id}-face`}
+        x1="190"
+        y1="170"
+        x2="440"
+        y2="270"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="var(--bg)" />
+        <stop offset="1" stop-color="var(--surface)" />
+      </linearGradient>
+      <g id={`${id}-plate`}>
+        <path
+          d="m140 190 160-80 160 80v19l-160 80-160-80Z"
+          fill={`url(#${id}-edge)`}
+        />
+        <path
+          d="m140 190 160-80 160 80-160 80Z"
+          fill={`url(#${id}-face)`}
+          stroke="#8e9db6"
+          stroke-width="1"
+        />
+      </g>
+    </defs>
+    <ellipse
+      cx="300"
+      cy="488"
+      rx="160"
+      ry="23"
+      fill="currentColor"
+      opacity=".07"
+    />
+    <path d="M188 216v160m224-160v160" stroke="#214cff" stroke-width="5" />
+    <g class="fallback-layer layer-data" transform="translate(0 160)">
+      <use href={`#${id}-plate`} />
+      <g transform="translate(277 149)">
+        <path d="M0 11v37c0 7 46 7 46 0V11" fill="#214cff" />
+        <ellipse cx="23" cy="11" rx="23" ry="8" fill="#6587ff" />
+        <path
+          d="M0 25c0 8 46 8 46 0m-46 13c0 8 46 8 46 0"
+          stroke="#b4c5ff"
+          stroke-width="1.5"
+        />
+      </g>
+      <text x="300" y="240" text-anchor="middle" class="layer-svg-label">
+        03 / {labels[2]}
+      </text>
+    </g>
+    <g class="fallback-layer layer-logic" transform="translate(0 80)">
+      <use href={`#${id}-plate`} />
+      <path d="m248 179 52-26 52 26-52 26Z" fill="#214cff" />
+      <text
+        x="300"
+        y="186"
+        text-anchor="middle"
+        fill="white"
+        font-family="monospace"
+        font-size="17"
+      >
+        {'{ }'}
+      </text>
+      <path d="m196 190 41-20m126 0 41 20" stroke="#214cff" stroke-width="2" />
+      <text x="300" y="240" text-anchor="middle" class="layer-svg-label">
+        02 / {labels[1]}
+      </text>
+    </g>
+    <g class="fallback-layer layer-interface">
+      <use href={`#${id}-plate`} />
+      <path d="m211 176 89-44 89 44-89 45Z" fill="var(--bg)" stroke="#8e9db6" />
+      <path d="m211 176 89-44 89 44-18 9-71-36-71 36Z" fill="#214cff" />
+      <path
+        d="m252 180 35-17m-17 27 34-17m-17 27 35-17"
+        stroke="#8e9db6"
+        stroke-width="3"
+      />
+      <text x="300" y="240" text-anchor="middle" class="layer-svg-label">
+        01 / {labels[0]}
+      </text>
+    </g>
+  </svg>
+  <div class="sculpture-render"></div>
+</div>

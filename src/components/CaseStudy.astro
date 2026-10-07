@@ -1,0 +1,147 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectArt from './ProjectArt.astro';
+import Contact from './Contact.astro';
+import Icon from './Icon.astro';
+import {
+  copy,
+  edition,
+  home,
+  workUrl,
+  projects,
+  type Locale,
+  type Project,
+} from '../data/portfolio';
+interface Props {
+  lang: Locale;
+  project: Project;
+}
+const { lang, project } = Astro.props;
+const t = copy[lang],
+  e = edition[lang],
+  content = project[lang];
+const next =
+  projects[
+    (projects.findIndex((p) => p.slug === project.slug) + 1) % projects.length
+  ];
+---
+
+<Layout
+  lang={lang}
+  slug={project.slug}
+  title={`${project.name} — Carlos Martínez`}
+  description={content.summary}
+>
+  <article class="case-study container">
+    <a class="text-link case-back" href={`${home(lang)}#work`}>
+      ← {t.back}
+    </a>
+    <div class="case-eyebrow">
+      <span class="eyebrow">
+        {project.number} / {e.caseLabel}
+      </span>
+      <span class="mono">{content.category}</span>
+    </div>
+    <div class="case-heading">
+      <h1
+        data-reveal-lines
+        style={`view-transition-name: project-title-${project.slug}`}
+      >
+        {project.name}
+        <span class="blue-text">.</span>
+      </h1>
+      <p>{content.title}</p>
+    </div>
+    <div class="case-meta">
+      <div>
+        <span class="eyebrow">{t.company}</span>
+        <strong>{project.company}</strong>
+      </div>
+      <div>
+        <span class="eyebrow">{t.projectRole}</span>
+        <strong>{t.role}</strong>
+      </div>
+      <div>
+        <span class="eyebrow">{t.period}</span>
+        <strong>{project.period[lang]}</strong>
+      </div>
+    </div>
+    <div
+      class="case-art"
+      style={`view-transition-name: project-art-${project.slug}`}
+    >
+      <ProjectArt slug={project.slug} lang={lang} />
+    </div>
+    <section class="case-prose">
+      <h2>{t.overview}</h2>
+      <p>{content.context}</p>
+    </section>
+    <section class="case-prose">
+      <h2>{t.contribution}</h2>
+      <p>{content.contribution}</p>
+    </section>
+    <section class="case-decisions">
+      <span class="eyebrow">{t.decisions}</span>
+      <div class="decisions-grid">
+        {content.decisions.map((decision, i) => (
+          <article>
+            <span class="mono blue-text">0{i + 1}</span>
+            <h3>{decision.title}</h3>
+            <p>{decision.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="case-architecture">
+      <div>
+        <span class="eyebrow">{t.concept}</span>
+        <h2>{t.architecture}</h2>
+        <p>{t.architectureNote}</p>
+      </div>
+      <ol>
+        {project.layers.map((layer, i) => (
+          <li>
+            <span class="mono">0{i + 1}</span>
+            <strong>
+              {lang === 'en'
+                ? layer
+                : layer
+                    .replace('Permissions', 'Permisos')
+                    .replace('Domain', 'Dominio')
+                    .replace('Payments', 'Pagos')
+                    .replace('Inventory', 'Inventario')}
+            </strong>
+            <Icon name="code" />
+          </li>
+        ))}
+      </ol>
+    </section>
+    <section class="case-prose">
+      <h2>{t.capabilities}</h2>
+      <ul class="capabilities">
+        {content.capabilities.map((item) => (
+          <li>
+            <Icon name="plus" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </section>
+    <section class="case-prose">
+      <h2>{t.stack}</h2>
+      <div class="project-tags">
+        {project.tags.map((tag) => (
+          <span>{tag}</span>
+        ))}
+      </div>
+    </section>
+    <a class="next-project" href={workUrl(lang, next.slug)}>
+      <div>
+        <span class="eyebrow">{t.next}</span>
+        <h2>{next.name}</h2>
+      </div>
+      <Icon name="diagonal" />
+    </a>
+  </article>
+  <Contact lang={lang} />
+</Layout>

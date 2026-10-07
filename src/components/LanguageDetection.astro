@@ -1,0 +1,36 @@
+<!-- Only the neutral entry point negotiates language; localized links stay explicit. -->
+<script is:inline>
+  (() => {
+    if (location.pathname !== '/') return;
+    const valid = (value) => value === 'en' || value === 'es';
+    const explicit = new URL(location.href).searchParams.get('lang');
+    let preference = valid(explicit) ? explicit : undefined;
+    for (const storage of ['localStorage', 'sessionStorage']) {
+      if (preference) break;
+      try {
+        const value = window[storage].getItem('portfolio-language');
+        if (valid(value)) {
+          preference = value;
+          break;
+        }
+      } catch {}
+    }
+    // Keep ordinary navigation within an English browsing session in English.
+    if (!preference && document.referrer) {
+      try {
+        if (new URL(document.referrer).origin === location.origin) return;
+      } catch {}
+    }
+    const languages = navigator.languages?.length
+      ? navigator.languages
+      : [navigator.language];
+    const detected = languages
+      .map((language) => language?.toLowerCase().split('-')[0])
+      .find(valid);
+    if ((preference || detected) === 'es') {
+      const target = new URL(location.href);
+      target.pathname = '/es/';
+      location.replace(target.href);
+    }
+  })();
+</script>
